@@ -79,3 +79,14 @@ def find(src='.', name='*', type=None, exec=str):
     elif type == 'l':
         paths = filter(lambda path: path.is_symlink(), paths)
     yield from map(exec, paths)
+
+def csv(dicts, dst, sep=','):
+    if isinstance(dicts, dict):
+        dicts = [dicts]
+    if not os.path.exists(dst):
+        with open(dst, 'w') as f:
+            print(sep.join(map(str, dicts[0].keys())), sep=sep, file=f)
+    with open(dst, 'a') as f:
+        for dict_ in dicts:
+            print(sep.join(map(str, dict_.values())), sep=sep, file=f)
+    return cat(dst)
